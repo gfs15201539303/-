@@ -7,11 +7,12 @@
 (function() {
   'use strict';
 
-  // ====== 配置 ======
   var isEnabled = true;
   var observer = null;
-  var processedNodes = new WeakSet();
   var translateCount = 0;
+  var processedNodes = new WeakSet();
+  var periodicTimer = null;
+  var DEBUG = false;
 
   // 按长度降序排列，长词优先匹配
   var terms = Object.keys(TRANSLATION_MAP).sort(function(a, b) {
@@ -29,7 +30,7 @@
     return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 
-  // 判断文本是否已含中文（≥30% 中文字符视为已汉化，跳过）
+  // 判断文本是否已含中文（≥25% 中文字符视为已汉化，跳过）
   function isMostlyCJK(text) {
     if (!text) return true;
     var count = 0;
@@ -41,7 +42,7 @@
         count++;
       }
     }
-    return count > text.length * 0.3;
+    return count > text.length * 0.25;
   }
 
   function hasEnglish(text) {
@@ -53,9 +54,12 @@
     if (!text || !hasEnglish(text) || isMostlyCJK(text)) return text;
     var result = text;
     for (var i = 0; i < patterns.length; i++) {
-      result = result.replace(patterns[i].regex, patterns[i].translation);
+      var newResult = result.replace(patterns[i].regex, patterns[i].translation);
+      if (newResult !== result) {
+        translateCount++;
+        result = newResult;
+      }
     }
-    if (result !== text) translateCount++;
     return result;
   }
 
@@ -69,7 +73,6 @@
       NodeFilter.SHOW_TEXT,
       {
         acceptNode: function(node) {
-          if (processedNodes.has(node)) return NodeFilter.FILTER_REJECT;
           var parent = node.parentElement;
           if (!parent) return NodeFilter.FILTER_REJECT;
           var tag = parent.tagName;
@@ -78,6 +81,9 @@
             return NodeFilter.FILTER_REJECT;
           }
           if (tag === 'TITLE') return NodeFilter.FILTER_REJECT;
+          // 跳过 OBR 扩展加载器自身
+          var cls = parent.className || '';
+          if (typeof cls === 'string' && cls.indexOf('obr-extension') !== -1) return NodeFilter.FILTER_REJECT;
           return NodeFilter.FILTER_ACCEPT;
         }
       }
@@ -86,18 +92,19 @@
     var nodes = [];
     while (walker.nextNode()) nodes.push(walker.currentNode);
 
+    var translated = 0;
     for (var i = 0; i < nodes.length; i++) {
       var tn = nodes[i];
-      if (processedNodes.has(tn)) continue;
       var text = tn.textContent;
-      if (!text || !hasEnglish(text)) {
-        processedNodes.add(tn);
-        continue;
+      if (!text || !hasEnglish(text)) continue;
+      if (isMostlyCJK(text)) continue;
+      var t = translateText(text);
+      if (t !== text) {
+        tn.textContent = t;
+        translated++;
       }
-      var translated = translateText(text);
-      if (translated !== text) tn.textContent = translated;
-      processedNodes.add(tn);
     }
+    if (translated > 0 && DEBUG) console.log('[枭雄汉化] 翻译了 ' + translated + ' 个节点');
   }
 
   // 处理新增节点（MutationObserver 回调）
@@ -108,14 +115,6 @@
       if (node.nodeType === Node.ELEMENT_NODE) {
         if (node.tagName === 'IFRAME') continue;
         processSubtree(node);
-      } else if (node.nodeType === Node.TEXT_NODE) {
-        if (processedNodes.has(node)) continue;
-        var text = node.textContent;
-        if (text && hasEnglish(text) && !isMostlyCJK(text)) {
-          var translated = translateText(text);
-          if (translated !== text) node.textContent = translated;
-        }
-        processedNodes.add(node);
       }
     }
   }
@@ -123,7 +122,11 @@
   // 启动监听
   function startObserving() {
     var target = document.body || document.documentElement;
-    if (!target) return;
+    if (!target) {
+      // OBR 可能还没渲染 body，重试
+      setTimeout(startObserving, 500);
+      return;
+    }
 
     if (observer) {
       observer.disconnect();
@@ -133,7 +136,7 @@
     // 初始扫描
     processSubtree(target);
 
-    // 监听后续变化
+    // 监听后续变化 — 不跳过已处理节点，因为 React 会更新内容
     observer = new MutationObserver(function(mutations) {
       if (!isEnabled) return;
       for (var i = 0; i < mutations.length; i++) {
@@ -142,13 +145,10 @@
           processAddedNodes(m.addedNodes);
         } else if (m.type === 'characterData') {
           var tn = m.target;
-          if (tn && !processedNodes.has(tn)) {
-            var txt = tn.textContent;
-            if (txt && hasEnglish(txt) && !isMostlyCJK(txt)) {
-              var translated = translateText(txt);
-              if (translated !== txt) tn.textContent = translated;
-            }
-            processedNodes.add(tn);
+          var txt = tn && tn.textContent;
+          if (txt && hasEnglish(txt) && !isMostlyCJK(txt)) {
+            var translated = translateText(txt);
+            if (translated !== txt) tn.textContent = translated;
           }
         }
       }
@@ -159,16 +159,25 @@
       subtree: true,
       characterData: true
     });
+
+    // 周期性重新扫描，捕获 React 重新渲染后遗漏的内容
+    if (periodicTimer) clearInterval(periodicTimer);
+    periodicTimer = setInterval(function() {
+      if (isEnabled) processSubtree(document.body);
+    }, 5000); // 每 5 秒扫描一次
+
+    if (DEBUG) console.log('[枭雄汉化] MutationObserver 已启动');
   }
 
   // ====== 从 storage 读取设置 ======
   function loadSettings() {
     if (typeof chrome !== 'undefined' && chrome.storage) {
-      chrome.storage.sync.get({
-        enabled: true
-      }, function(items) {
+      chrome.storage.sync.get({ enabled: true }, function(items) {
         isEnabled = items.enabled;
-        if (isEnabled && !observer) startObserving();
+        if (isEnabled) {
+          if (!observer) startObserving();
+          else processSubtree(document.body);
+        }
       });
     }
   }
@@ -186,24 +195,25 @@
     });
   }
 
-  // ====== 启动 ======
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function() {
-      loadSettings();
-      startObserving();
-    });
-  } else {
+  // ====== 多阶段启动确保覆盖 ======
+  function boot() {
     loadSettings();
     startObserving();
   }
 
-  // 页面完全加载后再次扫描（处理动态渲染的内容）
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+
+  // 页面完全加载后再次扫描
   window.addEventListener('load', function() {
-    setTimeout(function() {
-      processSubtree(document.body);
-    }, 1000);
+    setTimeout(function() { if (isEnabled) processSubtree(document.body); }, 500);
+    setTimeout(function() { if (isEnabled) processSubtree(document.body); }, 2000);
+    setTimeout(function() { if (isEnabled) processSubtree(document.body); }, 5000);
   });
 
-  console.log('[枭雄汉化] 内容脚本已加载，' + DICTIONARY.length + ' 条术语就绪');
+  console.log('[枭雄汉化] 已加载，' + DICTIONARY.length + ' 条术语就绪');
 
 })();
