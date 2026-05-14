@@ -1,11 +1,9 @@
 /**
- * 枭雄汉化 - Owlbear Rodeo 中文汉化插件
- * Chinese Localization Plugin for Owlbear Rodeo
+ * 枭雄汉化 - 词典数据
+ * 共享词典数据，供词典 UI 和界面翻译引擎使用
  */
 
-// ============ 词典数据 ============
-
-const DICTIONARY = [
+var DICTIONARY = [
   // ---- 战斗 Combat ----
   { term: 'Action', translation: '动作', category: 'combat' },
   { term: 'Bonus Action', translation: '附赠动作', category: 'combat' },
@@ -297,7 +295,6 @@ const DICTIONARY = [
   { term: 'Yuan-ti Pureblood', translation: '蛇人', category: 'race' },
 
   // ---- 怪物 Monster ----
-  { term: 'Goblin', translation: '地精', category: 'combat' },
   { term: 'Owlbear', translation: '枭熊', category: 'combat' },
   { term: 'Dragon', translation: '龙', category: 'combat' },
   { term: 'Giant', translation: '巨人', category: 'combat' },
@@ -320,228 +317,90 @@ const DICTIONARY = [
   { term: 'Angel', translation: '天使', category: 'combat' },
   { term: 'Hydra', translation: '九头蛇', category: 'combat' },
   { term: 'Manticore', translation: '蝎尾狮', category: 'combat' },
-  { term: 'Minotaur', translation: '牛头人', category: 'combat' },
   { term: 'Rat Swarm', translation: '鼠群', category: 'combat' },
   { term: 'Spider', translation: '蜘蛛', category: 'combat' },
   { term: 'Wolf', translation: '狼', category: 'combat' },
 
-  // ---- 通用 General ----
-  { term: 'Level Up', translation: '升级', category: 'rule' },
-  { term: 'Encounter', translation: '遭遇', category: 'rule' },
-  { term: 'Quest', translation: '任务', category: 'rule' },
-  { term: 'Loot', translation: '战利品', category: 'rule' },
-  { term: 'Treasure', translation: '宝藏', category: 'rule' },
-  { term: 'Campaign', translation: '战役', category: 'rule' },
-  { term: 'Session', translation: '团务', category: 'rule' },
-  { term: 'One-shot', translation: '短团', category: 'rule' },
-  { term: 'Homebrew', translation: '房规', category: 'rule' },
-  { term: 'House Rule', translation: '房规', category: 'rule' },
-  { term: 'Roll', translation: '掷骰', category: 'rule' },
-  { term: 'Roll20', translation: '掷骰20', category: 'rule' },
-  { term: 'Nat 20', translation: '天然20', category: 'rule' },
-  { term: 'Nat 1', translation: '天然1', category: 'rule' },
-  { term: 'Modifier', translation: '调整值', category: 'rule' },
-  { term: 'DC (Difficulty Class)', translation: '难度等级 (DC)', category: 'rule' },
-  { term: 'Token', translation: '棋子', category: 'rule' },
-  { term: 'Map', translation: '地图', category: 'rule' },
-  { term: 'Grid', translation: '网格', category: 'rule' },
-  { term: 'Fog of War', translation: '战争迷雾', category: 'rule' },
-  { term: 'Vision', translation: '视野', category: 'rule' },
-  { term: 'Light Source', translation: '光源', category: 'rule' },
-  { term: 'Aura', translation: '灵光', category: 'rule' },
-  { term: 'Buff', translation: '增益', category: 'rule' },
-  { term: 'Debuff', translation: '减益', category: 'rule' },
-  { term: 'AOE', translation: '范围效果', category: 'rule' },
-  { term: 'DoT (Damage over Time)', translation: '持续伤害', category: 'rule' },
-  { term: 'HoT (Heal over Time)', translation: '持续治疗', category: 'rule' },
-  { term: 'CC (Crowd Control)', translation: '群体控制', category: 'rule' },
-  { term: 'Pet', translation: '宠物', category: 'rule' },
-  { term: 'Summon', translation: '召唤', category: 'rule' },
-  { term: 'Familiar', translation: '魔宠', category: 'rule' },
-  { term: 'Steed', translation: '坐骑', category: 'rule' },
+  // ---- OBR UI ----
+  { term: 'Add', translation: '添加', category: 'ui' },
+  { term: 'Remove', translation: '移除', category: 'ui' },
+  { term: 'Edit', translation: '编辑', category: 'ui' },
+  { term: 'Delete', translation: '删除', category: 'ui' },
+  { term: 'Rename', translation: '重命名', category: 'ui' },
+  { term: 'Create', translation: '创建', category: 'ui' },
+  { term: 'Save', translation: '保存', category: 'ui' },
+  { term: 'Close', translation: '关闭', category: 'ui' },
+  { term: 'Cancel', translation: '取消', category: 'ui' },
+  { term: 'Name', translation: '名称', category: 'ui' },
+  { term: 'Type', translation: '类型', category: 'ui' },
+  { term: 'Color', translation: '颜色', category: 'ui' },
+  { term: 'Size', translation: '大小', category: 'ui' },
+  { term: 'Position', translation: '位置', category: 'ui' },
+  { term: 'Rotation', translation: '旋转', category: 'ui' },
+  { term: 'Opacity', translation: '不透明度', category: 'ui' },
+  { term: 'Visible', translation: '可见', category: 'ui' },
+  { term: 'Hidden', translation: '隐藏', category: 'ui' },
+  { term: 'Locked', translation: '锁定', category: 'ui' },
+  { term: 'Layer', translation: '图层', category: 'ui' },
+  { term: 'Grid', translation: '网格', category: 'ui' },
+  { term: 'Select', translation: '选择', category: 'ui' },
+  { term: 'Properties', translation: '属性', category: 'ui' },
+  { term: 'Settings', translation: '设置', category: 'ui' },
+  { term: 'Help', translation: '帮助', category: 'ui' },
+  { term: 'About', translation: '关于', category: 'ui' },
+  { term: 'Loading', translation: '加载中', category: 'ui' },
+  { term: 'Update', translation: '更新', category: 'ui' },
+  { term: 'Version', translation: '版本', category: 'ui' },
+  { term: 'Confirm', translation: '确认', category: 'ui' },
+  { term: 'Default', translation: '默认', category: 'ui' },
+  { term: 'Custom', translation: '自定义', category: 'ui' },
+  { term: 'None', translation: '无', category: 'ui' },
+  { term: 'All', translation: '全部', category: 'ui' },
+  { term: 'Shapes', translation: '形状', category: 'ui' },
+  { term: 'Assets', translation: '资源', category: 'ui' },
+  { term: 'Notes', translation: '笔记', category: 'ui' },
+  { term: 'Players', translation: '玩家', category: 'ui' },
+  { term: 'Characters', translation: '角色', category: 'ui' },
+  { term: 'Mount', translation: '挂载', category: 'ui' },
+  { term: 'Dock', translation: '停靠', category: 'ui' },
+  { term: 'Undock', translation: '取消停靠', category: 'ui' },
+  { term: 'Fullscreen', translation: '全屏', category: 'ui' },
+  { term: 'Minimize', translation: '最小化', category: 'ui' },
+  { term: 'Maximize', translation: '最大化', category: 'ui' },
+  { term: 'Expand', translation: '展开', category: 'ui' },
+  { term: 'Collapse', translation: '折叠', category: 'ui' },
+  { term: 'Reset', translation: '重置', category: 'ui' },
+  { term: 'Clear', translation: '清空', category: 'ui' },
+  { term: 'Apply', translation: '应用', category: 'ui' },
+  { term: 'Upload', translation: '上传', category: 'ui' },
+  { term: 'Download', translation: '下载', category: 'ui' },
+  { term: 'Import', translation: '导入', category: 'ui' },
+  { term: 'Export', translation: '导出', category: 'ui' },
+  { term: 'Print', translation: '打印', category: 'ui' },
+  { term: 'Share', translation: '分享', category: 'ui' },
+  { term: 'Copy', translation: '复制', category: 'ui' },
+  { term: 'Paste', translation: '粘贴', category: 'ui' },
+  { term: 'Cut', translation: '剪切', category: 'ui' },
+  { term: 'Undo', translation: '撤销', category: 'ui' },
+  { term: 'Redo', translation: '重做', category: 'ui' },
+  { term: 'Refresh', translation: '刷新', category: 'ui' },
+  { term: 'Search', translation: '搜索', category: 'ui' },
+  { term: 'Filter', translation: '筛选', category: 'ui' },
+  { term: 'Sort', translation: '排序', category: 'ui' },
+  { term: 'Group', translation: '分组', category: 'ui' },
+  { term: 'Ungroup', translation: '取消分组', category: 'ui' },
+  { term: 'Duplicate', translation: '复制', category: 'ui' },
+  { term: 'Preview', translation: '预览', category: 'ui' },
+  { term: 'Info', translation: '信息', category: 'ui' },
+  { term: 'Warning', translation: '警告', category: 'ui' },
+  { term: 'Error', translation: '错误', category: 'ui' },
+  { term: 'Success', translation: '成功', category: 'ui' },
+  { term: 'Connected', translation: '已连接', category: 'ui' },
+  { term: 'Disconnected', translation: '已断开', category: 'ui' },
 ];
 
-// ============ 应用逻辑 ============
-
-let currentCategory = 'all';
-let searchQuery = '';
-
-function getFilteredEntries() {
-  return DICTIONARY.filter(entry => {
-    // Category filter
-    if (currentCategory !== 'all' && entry.category !== currentCategory) return false;
-    // Search filter
-    if (searchQuery) {
-      const q = searchQuery.toLowerCase();
-      return (
-        entry.term.toLowerCase().includes(q) ||
-        entry.translation.includes(searchQuery) ||
-        (entry.original && entry.original.toLowerCase().includes(q))
-      );
-    }
-    return true;
-  });
-}
-
-function highlightMatch(text, query) {
-  if (!query) return text;
-  const idx = text.toLowerCase().indexOf(query.toLowerCase());
-  if (idx === -1) return text;
-  const before = text.slice(0, idx);
-  const match = text.slice(idx, idx + query.length);
-  const after = text.slice(idx + query.length);
-  return `${before}<mark>${match}</mark>${after}`;
-}
-
-function renderEntries() {
-  const container = document.getElementById('dictList');
-  const filtered = getFilteredEntries();
-  const statsEl = document.getElementById('entryCount');
-
-  statsEl.textContent = filtered.length;
-
-  if (filtered.length === 0) {
-    container.innerHTML = `
-      <div class="empty-state">
-        <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor">
-          <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-        </svg>
-        <p>没有匹配的词条</p>
-      </div>
-    `;
-    return;
-  }
-
-  const showOriginal = document.getElementById('showOriginal').checked;
-  const scrollTop = container.scrollTop;
-  const savedHeight = container.scrollHeight;
-
-  container.innerHTML = filtered.map(entry => {
-    const termHtml = highlightMatch(entry.term, searchQuery);
-    const transHtml = highlightMatch(entry.translation, searchQuery);
-
-    return `
-      <div class="dict-entry" data-term="${entry.term.toLowerCase()}">
-        <div class="term">${termHtml}</div>
-        <div class="translation">${transHtml}</div>
-        ${entry.original && showOriginal ? `<div class="original">原文：${entry.original}</div>` : ''}
-        <span class="category ${entry.category}">${getCategoryLabel(entry.category)}</span>
-      </div>
-    `;
-  }).join('');
-
-  // Preserve scroll position
-  container.scrollTop = scrollTop;
-}
-
-function getCategoryLabel(cat) {
-  const labels = {
-    combat: '战斗',
-    skill: '技能',
-    item: '物品',
-    spell: '法术',
-    rule: '规则',
-    class: '职业',
-    race: '种族'
-  };
-  return labels[cat] || cat;
-}
-
-// ============ UI 事件绑定 ============
-
-function initUI() {
-  // Search
-  const searchInput = document.getElementById('searchInput');
-  const clearBtn = document.getElementById('clearBtn');
-
-  searchInput.addEventListener('input', () => {
-    searchQuery = searchInput.value.trim();
-    clearBtn.classList.toggle('visible', searchQuery.length > 0);
-    renderEntries();
-  });
-
-  clearBtn.addEventListener('click', () => {
-    searchInput.value = '';
-    searchQuery = '';
-    clearBtn.classList.remove('visible');
-    renderEntries();
-    searchInput.focus();
-  });
-
-  // Category tags
-  document.querySelectorAll('.tag').forEach(tag => {
-    tag.addEventListener('click', () => {
-      document.querySelectorAll('.tag').forEach(t => t.classList.remove('active'));
-      tag.classList.add('active');
-      currentCategory = tag.dataset.cat;
-      renderEntries();
-    });
-  });
-
-  // Tabs
-  document.querySelectorAll('.tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-      tab.classList.add('active');
-      document.getElementById(`panel${capitalize(tab.dataset.tab)}`).classList.add('active');
-    });
-  });
-
-  // Settings
-  document.getElementById('showOriginal').addEventListener('change', renderEntries);
-
-  // Stats
-  document.getElementById('totalEntries').textContent = DICTIONARY.length;
-}
-
-function capitalize(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
-// ============ Toast 提示 ============
-
-function showToast(message) {
-  const toast = document.getElementById('toast');
-  toast.textContent = message;
-  toast.classList.add('show');
-  clearTimeout(toast._hideTimer);
-  toast._hideTimer = setTimeout(() => toast.classList.remove('show'), 2500);
-}
-
-// ============ OBR 初始化 ============
-
-function initOBR() {
-  if (typeof OBR === 'undefined') {
-    console.warn('[枭雄汉化] OBR SDK 未加载，以独立模式运行');
-    document.querySelector('.header').style.borderBottom = '1px solid #e8b84b';
-    return;
-  }
-
-  OBR.onReady(() => {
-    console.log('[枭雄汉化] 插件已就绪');
-
-    // Set popover size
-    if (OBR.popover) {
-      OBR.popover.setHeight(650);
-      OBR.popover.setWidth(420);
-    }
-
-    // Optional: listen for item selection to provide translations
-    if (OBR.player && OBR.player.onChange) {
-      OBR.player.onChange(() => {
-        // Could update UI based on player state
-      });
-    }
-
-    showToast('枭雄汉化插件已加载');
-  });
-}
-
-// ============ 启动 ============
-
-document.addEventListener('DOMContentLoaded', () => {
-  initUI();
-  initOBR();
-  renderEntries();
+// 构建快速查询映射
+var TRANSLATION_MAP = {};
+DICTIONARY.forEach(function(entry) {
+  TRANSLATION_MAP[entry.term] = entry.translation;
 });

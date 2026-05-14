@@ -1,18 +1,19 @@
 {
+  "manifest_version": 3,
   "name": "枭雄汉化",
   "version": "1.0.0",
-  "manifest_version": 1,
-  "description": "枭雄(TheOpenBuild)中文汉化插件 — 提供完整的界面汉化和术语翻译",
-  "icon": "/icon.svg",
-  "author": "枭雄汉化组",
-  "homepage_url": "",
-  "action": {
-    "title": "枭雄汉化",
-    "icon": "/icon.svg",
-    "popover": "/",
-    "height": 650,
-    "width": 420
+  "description": "自动汉化 Owlbear Rodeo 界面中的英文 TRPG 术语",
+  "icons": {
+    "128": "icon.svg"
   },
-  "background_url": "/background.html",
-  "permissions": []
+  "content_scripts": [{
+    "matches": ["https://www.owlbear.rodeo/*"],
+    "js": ["dictionary.js", "content.js"],
+    "run_at": "document_idle"
+  }],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "枭雄汉化"
+  },
+  "permissions": ["storage"]
 }

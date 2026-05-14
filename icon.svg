@@ -12,8 +12,8 @@
   <rect x="42" y="38" rx="2" width="44" height="3" fill="#e8b84b" opacity="0.8"/>
   <rect x="42" y="45" rx="2" width="44" height="3" fill="#e8b84b" opacity="0.5"/>
   <rect x="42" y="52" rx="2" width="30" height="3" fill="#e8b84b" opacity="0.5"/>
-  <!-- Chinese character 枭 -->
-  <text x="64" y="80" font-family="serif" font-size="32" font-weight="bold" fill="#e8b84b" text-anchor="middle" dominant-baseline="central">枭</text>
+  <!-- Chinese character 汉 -->
+  <text x="64" y="80" font-family="serif" font-size="32" font-weight="bold" fill="#e8b84b" text-anchor="middle" dominant-baseline="central">汉</text>
   <!-- Small stars -->
   <circle cx="42" cy="28" r="2" fill="#e8b84b" opacity="0.6"/>
   <circle cx="86" cy="28" r="2" fill="#e8b84b" opacity="0.6"/>
