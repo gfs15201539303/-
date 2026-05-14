@@ -3,16 +3,16 @@
   "version": "1.0.0",
   "manifest_version": 1,
   "description": "枭雄(TheOpenBuild)中文汉化插件 — 提供完整的界面汉化和术语翻译",
-  "icon": "icon.svg",
+  "icon": "/-/owlbear-chinese-plugin/icon.svg",
   "author": "枭雄汉化组",
   "homepage_url": "https://github.com/gfs15201539303/-",
   "action": {
     "title": "枭雄汉化",
-    "icon": "icon.svg",
-    "popover": "index.html",
+    "icon": "/-/owlbear-chinese-plugin/icon.svg",
+    "popover": "/-/owlbear-chinese-plugin/",
     "height": 650,
     "width": 420
   },
-  "background_url": "background.html",
+  "background_url": "/-/owlbear-chinese-plugin/background.html",
   "permissions": []
 }
