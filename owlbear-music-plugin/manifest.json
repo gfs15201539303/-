@@ -1,0 +1,16 @@
+{
+  "name": "枭雄音乐",
+  "version": "1.0.0",
+  "manifest_version": 1,
+  "description": "枭雄(TheOpenBuild)音乐播放插件 — 支持网易云音乐播放",
+  "icon": "/-/owlbear-music-plugin/icon.svg",
+  "author": "枭雄音乐组",
+  "action": {
+    "title": "枭雄音乐",
+    "icon": "/-/owlbear-music-plugin/icon.svg",
+    "popover": "/-/owlbear-music-plugin/",
+    "height": 500,
+    "width": 400
+  },
+  "background_url": "/-/owlbear-music-plugin/background.html"
+}

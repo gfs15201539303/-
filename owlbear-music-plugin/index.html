@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>枭雄音乐</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">
+        <svg viewBox="0 0 24 24" class="logo-icon" width="22" height="22">
+          <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55C7.79 13 6 14.79 6 17s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" fill="currentColor"/>
+        </svg>
+        <h1>枭雄音乐</h1>
+      </div>
+      <span class="version">v1.0.0</span>
+    </header>
+
+    <!-- Tabs -->
+    <nav class="tabs">
+      <button class="tab active" data-tab="player">播放</button>
+      <button class="tab" data-tab="playlist">歌单</button>
+      <button class="tab" data-tab="settings">设置</button>
+    </nav>
+
+    <!-- Player Panel -->
+    <section class="panel active" id="panelPlayer">
+      <!-- Input -->
+      <div class="input-area">
+        <input type="text" id="songInput" placeholder="网易云歌曲/歌单链接 或 ID" />
+        <button id="loadBtn" class="btn">加载</button>
+      </div>
+
+      <!-- NetEase embed player -->
+      <div id="neteasePlayer" class="netease-player">
+        <div class="empty-player">
+          <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor">
+            <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55C7.79 13 6 14.79 6 17s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" opacity="0.3"/>
+          </svg>
+          <p>输入网易云歌曲/歌单链接开始播放</p>
+        </div>
+        <iframe id="neteaseIframe" style="display:none;" frameborder="no" marginwidth="0" marginheight="0" allow="autoplay"></iframe>
+      </div>
+
+      <!-- HTML5 Audio Player (fallback / local files) -->
+      <div id="audioPlayer" class="audio-player" style="display:none;">
+        <div class="player-controls">
+          <button id="prevBtn" class="ctrl-btn" title="上一首">⏮</button>
+          <button id="playBtn" class="ctrl-btn play-btn" title="播放/暂停">▶</button>
+          <button id="nextBtn" class="ctrl-btn" title="下一首">⏭</button>
+          <button id="stopBtn" class="ctrl-btn" title="停止">⏹</button>
+        </div>
+        <div class="progress-area">
+          <span id="currentTime">0:00</span>
+          <input type="range" id="progressBar" value="0" max="100" />
+          <span id="totalTime">0:00</span>
+        </div>
+        <div class="volume-area">
+          <span>🔊</span>
+          <input type="range" id="volumeSlider" value="80" min="0" max="100" />
+        </div>
+        <div id="currentTrack" class="track-info">未播放</div>
+      </div>
+    </section>
+
+    <!-- Playlist Panel -->
+    <section class="panel" id="panelPlaylist">
+      <div class="playlist-header">
+        <h3>我的歌单</h3>
+        <span id="playlistCount">0 首</span>
+      </div>
+      <div class="playlist-area" id="playlistArea">
+        <div class="empty-state">歌单为空，在播放页面添加歌曲</div>
+      </div>
+    </section>
+
+    <!-- Settings Panel -->
+    <section class="panel" id="panelSettings">
+      <div class="setting-group">
+        <h3>播放设置</h3>
+        <label class="setting-row">
+          <span>自动播放</span>
+          <input type="checkbox" id="autoplay" checked />
+        </label>
+        <label class="setting-row">
+          <span>循环播放</span>
+          <input type="checkbox" id="loopPlay" />
+        </label>
+        <label class="setting-row">
+          <span>默认音量</span>
+          <input type="range" id="defaultVolume" value="80" min="0" max="100" />
+          <span id="volumeLabel">80%</span>
+        </label>
+      </div>
+      <div class="setting-group">
+        <h3>关于</h3>
+        <div class="about-text">
+          <p>枭雄音乐插件支持播放网易云音乐歌曲和歌单。</p>
+          <p>使用方法：复制网易云歌曲/歌单链接，粘贴到输入框后点击加载。</p>
+          <p class="hint">插件使用网易云官方外链播放器。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
