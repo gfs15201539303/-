@@ -1,10 +1,12 @@
 {
   "manifest_version": 3,
-  "name": "枭雄汉化",
+  "name": "枭雄汉化 - Owlbear Rodeo 中文翻译",
   "version": "1.0.0",
-  "description": "自动汉化 Owlbear Rodeo 界面中的英文 TRPG 术语",
+  "description": "自动将 Owlbear Rodeo 界面中的英文 TRPG 术语翻译为中文，支持 D&D 5e 规则术语",
   "icons": {
-    "128": "icon.svg"
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
   },
   "content_scripts": [{
     "matches": ["https://www.owlbear.rodeo/*"],
@@ -13,7 +15,12 @@
   }],
   "action": {
     "default_popup": "popup.html",
-    "default_title": "枭雄汉化"
+    "default_title": "枭雄汉化",
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
   },
   "permissions": ["storage"]
 }
